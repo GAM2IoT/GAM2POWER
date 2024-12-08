@@ -24,19 +24,22 @@ WiFiClient espClient;
 PubSubClient client(espClient); 
 MCMmeter meter;                       // Create an instance
 
-const char *mqtt_broker = "147.94.219.22"; // Identifiant du broker (Adresse IP)
+const char *mqtt_broker = "XXX.XX.X.XXX"; // Identifiant du broker (Adresse IP)
 const char *topic = "Pap"; // Nom du topic sur lequel les données seront envoyés. 
 const char *mqtt_username = ""; // Identifiant dans le cas d'une liaison sécurisée
 const char *mqtt_password = ""; // Mdp dans le cas d'une liaison sécurisée
 const int mqtt_port = 1883; // Port : 1883 dans le cas d'une liaison non sécurisée et 8883 dans le cas d'une liaison cryptée
 
-// Paramètres EDUROAM (A COMPLETER)
-#define EAP_IDENTITY "gwenael.drouet@etu.univ-amu.fr"
-#define EAP_PASSWORD "Lucie2008*" 
-#define EAP_USERNAME "gwenael.drouet@etu.univ-amu.fr" 
-const char* ssid = "eduroam"; // eduroam SSID
+// Paramètres Wifi (à adapter sur un wifi plus simple en commentaire)
+#define EAP_IDENTITY ""
+#define EAP_PASSWORD "" 
+#define EAP_USERNAME "" 
+const char* ssid = ""; // Wifi SSID
 
-// Déclaration - Grandeur physique étudiée (A COMPLETER)
+//const char* ssid = ""; // Wifi SSID
+//#define EAP_PASSWORD ""
+
+//constante d'horodatage
 const char* ntpServer = "pool.ntp.org";
 const long  gmtOffset_sec = 3600 * 1;
 const int   daylightOffset_sec = 3600 * 0;
@@ -60,9 +63,11 @@ void setup()
   pinMode(33, INPUT);
   bme280.setupBME();
 
-  // Connexion au réseau EDUROAM 
+  // Connexion au réseau Wifi 
   WiFi.disconnect(true);
   WiFi.begin(ssid, WPA2_AUTH_PEAP, EAP_IDENTITY, EAP_USERNAME, EAP_PASSWORD); 
+  //Avec un réseau plus simple :
+  //Wifi.begin(ssid,EAP_PASSWORD);
   
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);

@@ -3,8 +3,8 @@
 * @n Fonctions: Lit les données toutes les 5 secondes et les envoie en MQTT
 * @copyright Copyright (c) 2024 GAM2IOT
 * @version V0.1
-* @date 2024-4-12
-* @url https://github.com/DFRobot/DFRobot_CCS811
+* @date 2024-10-12
+* @url https://github.com/GAM2IoT/GAM2POWER
 */
 
 

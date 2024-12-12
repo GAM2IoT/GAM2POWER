@@ -1,36 +1,36 @@
 [
     {
-        "id": "da74ad7843a0c006",
+        "id": "1c773a36e349ee9c",
         "type": "tab",
-        "label": "Flux 1",
+        "label": "Flux 2",
         "disabled": false,
         "info": "",
         "env": []
     },
     {
-        "id": "07266a52eb998812",
+        "id": "86d538ba2fb293e8",
         "type": "function",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "name": "Seuils email",
-        "func": "// Récupère la chaîne de caractères du message d'entrée\nlet data = msg.payload;\nlet seuil1 = msg.topic;\nlet seuil2 = msg.topic;\n\n// Initialise les seuils\nconst seuilPap = 500;\nconst seuilPac = 500;\n\n// Fonction pour détecter les dépassements de seuil\nfunction detectDepassement(label, valeur, seuil) {\n    if (valeur > seuil) {\n        let depassement = valeur - seuil;\n        return `${label} est supérieur de ${depassement}W au seuil (${valeur}W > ${seuil}W)`;\n    }\n    return null;\n}\n\n// Extraire les valeurs avec des expressions régulières\nlet matchPap = data.match(/Pap(\\d+)/);\nlet matchPac = data.match(/Pac(\\d+)/);\n\n// Vérifie si les valeurs Pap et Pac existent\nif (matchPap && matchPac) {\n    let Pap = parseInt(matchPap[1], 10); // Convertit la valeur de Pap en entier\n    let Pac = parseInt(matchPac[1], 10); // Convertit la valeur de Pac en entier\n\n    // Liste pour stocker les messages de dépassement\n    let depassements = [];\n\n    // Vérifie les dépassements pour chaque seuil\n    let depPap = detectDepassement(\"Puissance apparente\", Pap, seuilPap);\n    let depPac = detectDepassement(\"Puissance active\", Pac, seuilPac);\n\n    // Ajoute les dépassements détectés à la liste\n    if (depPap) depassements.push(depPap);\n    if (depPac) depassements.push(depPac);\n\n    // Si des dépassements ont été détectés, retourne le message\n    if (depassements.length > 0) {\n        msg.payload = `<strong><u>Attention, les seuils sont dépassés :</u></strong><br>` +\n            `<strong><u>Valeurs :</u></strong><br>Pap = ${Pap} W<br>Pac = ${Pac} W<br><br>` +\n            `<strong><u>Détails des dépassements :</u></strong><br>` +\n            depassements.join(\"<br>\") +\n            `<br><br>Cordialement,`;\n\n        msg.topic = `Alerte de dépassement de seuils`; // Ajoute le topic pour signaler l'alerte\n        return msg; // Retourne le message avec l'alerte et les détails\n    }\n}\n\n// Si aucune condition n'est remplie, ne retourne rien\nreturn null;\n",
+        "func": "// Récupère la chaîne de caractères du message d'entrée\nlet data = msg.payload;\nlet seuil1 = msg.topic;\nlet seuil2 = msg.topic;\nlet seuil3 = msg.topic;\n\n// Initialise les seuils\nconst seuilPap = 100;\nconst seuilPac = 100;\nconst seuilPreac = 100;\n\n// Fonction pour détecter les dépassements de seuil\nfunction detectDepassement(label, valeur, seuil) {\n    if (valeur > seuil) {\n        let depassement = valeur - seuil;\n        return `${label} est supérieur de ${depassement}W au seuil (${valeur}W > ${seuil}W)`;\n    }\n    return null;\n}\n\n// Extraire les valeurs avec des expressions régulières\nlet matchPap = data.match(/Pap(\\d+)/);\nlet matchPac = data.match(/Pac(\\d+)/);\nlet matchPreac = data.match(/Preac(\\d+)/);\n\n// Vérifie si les valeurs Pap et Pac existent\nif (matchPap && matchPac) {\n    let Pap = parseInt(matchPap[1], 10); // Convertit la valeur de Pap en entier\n    let Pac = parseInt(matchPac[1], 10); // Convertit la valeur de Pac en entier\n    let Preac = parseInt(matchPreac[1], 10); // Convertit la valeur de Pac en entier\n\n    // Liste pour stocker les messages de dépassement\n    let depassements = [];\n\n    // Vérifie les dépassements pour chaque seuil\n    let depPap = detectDepassement(\"Puissance apparente\", Pap, seuilPap);\n    let depPac = detectDepassement(\"Puissance active\", Pac, seuilPac);\n    let depPreac = detectDepassement(\"Puissance réactive\", Preac, seuilPreac);\n    \n    // Ajoute les dépassements détectés à la liste\n    if (depPap) depassements.push(depPap);\n    if (depPac) depassements.push(depPac);\n    if (depPreac) depassements.push(depPreac);\n\n    // Si des dépassements ont été détectés, retourne le message\n    if (depassements.length > 0) {\n        msg.payload = `<strong><u>Attention, les seuils sont dépassés :</u></strong><br>` +\n            `<strong><u>Valeurs :</u></strong><br>Pap = ${Pap} W<br>Pac = ${Pac} W<br><br> = ${Preac} W<br><br>` +\n            `<strong><u>Détails des dépassements :</u></strong><br>` +\n            depassements.join(\"<br>\") +\n            `<br><br>Cordialement,`;\n\n        msg.topic = `Alerte de dépassement de seuils`; // Ajoute le topic pour signaler l'alerte\n        return msg; // Retourne le message avec l'alerte et les détails\n    }\n}\n\n// Si aucune condition n'est remplie, ne retourne rien\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 470,
-        "y": 80,
+        "x": 480,
+        "y": 140,
         "wires": [
             [
-                "bafc404d47dc21c6"
+                "dd9917f20f5ba5d0"
             ]
         ]
     },
     {
-        "id": "2e4988cea564602f",
+        "id": "0a48ddc3f2c8132e",
         "type": "function",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "name": "Pap",
         "func": "// Récupère la chaîne de caractères du message d'entrée\nlet data = msg.payload;\n\n// Recherche la valeur après \"Pap\" avec une expression régulière\nlet matchPap = data.match(/Pap(\\d+)/);\n\n// Si trouvé, renvoie la valeur\nif (matchPap) {\n    msg.payload = parseInt(matchPap[1], 10); // Convertit en entier\n    return msg; // Retourne le message avec la valeur\n}\n\n// Sinon, ne retourne rien\nreturn null;\n",
         "outputs": 1,
@@ -39,19 +39,19 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 450,
-        "y": 140,
+        "x": 460,
+        "y": 200,
         "wires": [
             [
-                "5819391f9ceb5105",
-                "f839c4b00374ccbb"
+                "44aea72c58446f23",
+                "136607395efc544e"
             ]
         ]
     },
     {
-        "id": "c32f70a1c81eb7cd",
+        "id": "b286cbfc65ac834a",
         "type": "function",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "name": "Pac",
         "func": "// Récupère la chaîne de caractères du message d'entrée\nlet data = msg.payload;\n\n// Recherche la valeur après \"Pap\" avec une expression régulière\nlet matchPap = data.match(/Pap(\\d+)/);\n\n// Si trouvé, renvoie la valeur\nif (matchPap) {\n    msg.payload = parseInt(matchPap[1], 10); // Convertit en entier\n    return msg; // Retourne le message avec la valeur\n}\n\n// Sinon, ne retourne rien\nreturn null;\n",
         "outputs": 1,
@@ -60,20 +60,20 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 450,
-        "y": 260,
+        "x": 460,
+        "y": 320,
         "wires": [
             [
-                "acb87971404998a1",
-                "4fdef443c6dbd03d"
+                "2e5cda846d258bd9",
+                "eef6382286fc8882"
             ]
         ]
     },
     {
-        "id": "562467ec669055d9",
+        "id": "7c329bb74105592c",
         "type": "debug",
-        "z": "da74ad7843a0c006",
-        "name": "debug 3",
+        "z": "1c773a36e349ee9c",
+        "name": "debug 5",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -81,17 +81,17 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 440,
-        "y": 900,
+        "x": 450,
+        "y": 960,
         "wires": []
     },
     {
-        "id": "5819391f9ceb5105",
+        "id": "44aea72c58446f23",
         "type": "ui_chart",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "name": "",
         "group": "f9bd694023163a55",
-        "order": 4,
+        "order": 2,
         "width": 0,
         "height": 0,
         "label": "chart",
@@ -123,17 +123,17 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 670,
-        "y": 180,
+        "x": 680,
+        "y": 240,
         "wires": [
             []
         ]
     },
     {
-        "id": "f839c4b00374ccbb",
+        "id": "136607395efc544e",
         "type": "function",
-        "z": "da74ad7843a0c006",
-        "name": "function 4",
+        "z": "1c773a36e349ee9c",
+        "name": "function 8",
         "func": "// Récupère la valeur depuis msg.payload\nlet valeur = msg.payload;\n\n// Vérifie si la valeur est supérieure à 1000\nif (valeur > 1000) {\n    // Si la valeur est supérieure à 1000, on renvoie true\n    return { payload: true };\n}\n\n// Sinon, ne rien renvoyer\nreturn null;",
         "outputs": 1,
         "timeout": 0,
@@ -141,17 +141,17 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 680,
-        "y": 140,
+        "x": 690,
+        "y": 200,
         "wires": [
             []
         ]
     },
     {
-        "id": "acb87971404998a1",
+        "id": "2e5cda846d258bd9",
         "type": "function",
-        "z": "da74ad7843a0c006",
-        "name": "function 5",
+        "z": "1c773a36e349ee9c",
+        "name": "function 9",
         "func": "// Récupère la valeur depuis msg.payload\nlet valeur = msg.payload;\n\n// Vérifie si la valeur est supérieure à 1000\nif (valeur > 500) {\n    // Si la valeur est supérieure à 1000, on renvoie true\n    return { payload: true };\n}\n\n// Sinon, ne rien renvoyer\nreturn null;",
         "outputs": 1,
         "timeout": 0,
@@ -159,77 +159,77 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 680,
-        "y": 260,
+        "x": 690,
+        "y": 320,
         "wires": [
             []
         ]
     },
     {
-        "id": "d458f5f1455ff704",
+        "id": "e2e0a519d72698c4",
         "type": "function",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "name": "Heure",
-        "func": "// Récupère la chaîne de caractères du message d'entrée\nlet data = msg.payload;\n\n// Recherche le format de l'heure après \"Time\" avec une expression régulière\nlet matchTime = data.match(/Heure(\\d{2}:\\d{2}:\\d{2})/);\n\n// Si trouvé, renvoie l'heure complète au format HH:MM:SS\nif (matchTime) {\n    msg.payload = matchTime[1]; // Extrait l'heure correspondante\n    return msg; // Retourne le message avec l'heure\n}\n\n// Sinon, ne retourne rien\nreturn null;\n",
+        "func": "// Récupère la chaîne de caractères du message d'entrée\nlet data = msg.payload;\n\n// Recherche le format de l'heure après \"Time\" avec une expression régulière\nlet matchTime = data.match(/Time(\\d{2}:\\d{2}:\\d{2})/);\n\n// Si trouvé, renvoie l'heure complète au format HH:MM:SS\nif (matchTime) {\n    msg.payload = matchTime[1]; // Extrait l'heure correspondante\n    return msg; // Retourne le message avec l'heure\n}\n\n// Sinon, ne retourne rien\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 450,
+        "x": 460,
+        "y": 620,
+        "wires": [
+            [
+                "f727e5e9af8f5394",
+                "dab041de33bfde38"
+            ]
+        ]
+    },
+    {
+        "id": "be735b28d81e6109",
+        "type": "function",
+        "z": "1c773a36e349ee9c",
+        "name": "vrms",
+        "func": "// Récupère la chaîne de caractères du message d'entrée\nlet data = msg.payload;\n\n// Recherche la valeur après \"Vrms\" avec une expression régulière\nlet matchVrms = data.match(/Vrms([-\\d.]+)/);\n\n// Si trouvé, renvoie la valeur\nif (matchVrms>198 && matchVrms<232) {\n    msg.payload = \"Vrms = \" + parseFloat(matchVrms[1]) + \" (3,84 k=2) V\"; // Convertit en nombre flottant\n    return msg; // Retourne le message avec la valeur\n} else{\n    msg.payload = \"Tension en dehors des gammes de mesures\"\n    return msg;\n}\n\n// Sinon, ne retourne rien\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 480,
+        "wires": [
+            [
+                "7c219f8b2e03e63b"
+            ]
+        ]
+    },
+    {
+        "id": "f90822979aa3bc25",
+        "type": "function",
+        "z": "1c773a36e349ee9c",
+        "name": "Irms",
+        "func": "// Récupère la chaîne de caractères du message d'entrée\nlet data = msg.payload;\n\n// Recherche la valeur après \"Irms\" avec une expression régulière\nlet matchIrms = data.match(/Irms([-\\d.]+)/);\n\n// Si trouvé, renvoie la valeur\nif (matchIrms>=1.21 && matchIrms<8) {\n    msg.payload = \"Irms = \" + parseFloat(matchIrms[1]) + \"A\"; // Convertit en nombre flottant\n    return msg; // Retourne le message avec la valeur\n}else{\n    msg.payload = \"Courant en dehors des gammes de mesures\"\n    return msg;\n}\n\n// Sinon, ne retourne rien\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
         "y": 560,
         "wires": [
             [
-                "a961196c1d209a7e",
-                "54a50ad142d950a2"
+                "ecb711fb647f67d2"
             ]
         ]
     },
     {
-        "id": "99d25383b058245a",
+        "id": "878807cdd46df89b",
         "type": "function",
-        "z": "da74ad7843a0c006",
-        "name": "vrms",
-        "func": "// Récupère la chaîne de caractères du message d'entrée\nlet data = msg.payload;\n\n// Recherche la valeur après \"Vrms\" avec une expression régulière\nlet matchVrms = data.match(/Vrms([-\\d.]+)/);\n\n// Si trouvé, renvoie la valeur\nif (matchVrms>110 && matchVrms<245) {\n    msg.payload = \"Vrms = \" + parseFloat(matchVrms[1]) + \" (3,84 k=2) V\"; // Convertit en nombre flottant\n    return msg; // Retourne le message avec la valeur\n} else{\n    msg.payload = \"Tension en dehors des gammes de mesures\"\n    return msg;\n}\n\n// Sinon, ne retourne rien\nreturn null;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 450,
-        "y": 420,
-        "wires": [
-            [
-                "966d1db6d7dd5e93"
-            ]
-        ]
-    },
-    {
-        "id": "122fe66a238e0ff0",
-        "type": "function",
-        "z": "da74ad7843a0c006",
-        "name": "Irms",
-        "func": "// Récupère la chaîne de caractères du message d'entrée\nlet data = msg.payload;\n\n// Recherche la valeur après \"Irms\" avec une expression régulière\nlet matchIrms = data.match(/Irms([-\\d.]+)/);\n\n// Si trouvé, renvoie la valeur\nif (matchIrms>=0.27 && matchIrms<20) {\n    msg.payload = \"Irms = \" + parseFloat(matchIrms[1]) + \"A\"; // Convertit en nombre flottant\n    return msg; // Retourne le message avec la valeur\n}else{\n    msg.payload = \"Courant en dehors des gammes de mesures\"\n    return msg;\n}\n\n// Sinon, ne retourne rien\nreturn null;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 450,
-        "y": 500,
-        "wires": [
-            [
-                "3aef33584a1b5053"
-            ]
-        ]
-    },
-    {
-        "id": "412725d5481287f6",
-        "type": "function",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "name": "Hum",
         "func": "// Récupère la chaîne de caractères du message d'entrée\nlet data = msg.payload;\n\n// Recherche la valeur après \"Hum\" avec une expression régulière\nlet matchHum = data.match(/Hum([-\\d.]+)/);\n\n// Si trouvé, renvoie la valeur\nif (matchHum) {\n    msg.payload = \"Humidité = \" + parseFloat(matchHum[1]) + \"RH%\"; // Convertit en nombre flottant\n    return msg; // Retourne le message avec la valeur\n}\n\n// Sinon, ne retourne rien\nreturn null;\n",
         "outputs": 1,
@@ -238,18 +238,18 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 450,
-        "y": 640,
+        "x": 460,
+        "y": 700,
         "wires": [
             [
-                "8d330136a9061371"
+                "5f1d0f1945eb348c"
             ]
         ]
     },
     {
-        "id": "e24372388f95c940",
+        "id": "6ad40d1d3a88d7bf",
         "type": "function",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "name": "Pression",
         "func": "// Récupère la chaîne de caractères du message d'entrée\nlet data = msg.payload;\n\n// Recherche la valeur après \"Pression\" avec une expression régulière\nlet matchPression = data.match(/Pression([-\\d.]+)/);\n\n// Si trouvé, renvoie la valeur\nif (matchPression) {\n    msg.payload = \"Pression = \" + parseFloat(matchPression[1]) + \"hPa\"; // Convertit en nombre flottant\n    return msg; // Retourne le message avec la valeur\n}\n\n// Sinon, ne retourne rien\nreturn null;\n",
         "outputs": 1,
@@ -258,18 +258,18 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 460,
-        "y": 780,
+        "x": 470,
+        "y": 840,
         "wires": [
             [
-                "1a1d63189c7a6015"
+                "ec6f3e909551ae87"
             ]
         ]
     },
     {
-        "id": "0e0c58fb4816fe3f",
+        "id": "810d28c362d1cb45",
         "type": "function",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "name": "Température",
         "func": "// Récupère la chaîne de caractères du message d'entrée\nlet data = msg.payload;\n\n// Recherche la valeur après \"Temp\" avec une expression régulière\nlet matchTemp = data.match(/Temp([-\\d.]+)/);\n\n// Si trouvé, renvoie la valeur\nif (matchTemp) {\n    msg.payload = \"Température = \" + parseFloat(matchTemp[1]) + \"°C\"; // Convertit en nombre flottant\n    return msg; // Retourne le message avec la valeur\n}\n\n// Sinon, ne retourne rien\nreturn null;\n",
         "outputs": 1,
@@ -278,41 +278,20 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 470,
-        "y": 700,
+        "x": 480,
+        "y": 760,
         "wires": [
             [
-                "6c3e1d212587200e"
+                "8a9d7b41730eaf88"
             ]
         ]
     },
     {
-        "id": "966d1db6d7dd5e93",
+        "id": "7c219f8b2e03e63b",
         "type": "ui_text",
-        "z": "da74ad7843a0c006",
-        "group": "f9bd694023163a55",
-        "order": 8,
-        "width": 0,
-        "height": 0,
-        "name": "",
-        "label": "",
-        "format": "{{msg.payload}}",
-        "layout": "row-spread",
-        "className": "",
-        "style": false,
-        "font": "",
-        "fontSize": 16,
-        "color": "#000000",
-        "x": 690,
-        "y": 420,
-        "wires": []
-    },
-    {
-        "id": "3aef33584a1b5053",
-        "type": "ui_text",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "group": "bc8cf8eff8409866",
-        "order": 8,
+        "order": 3,
         "width": 0,
         "height": 0,
         "name": "",
@@ -324,16 +303,37 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 690,
-        "y": 500,
+        "x": 700,
+        "y": 480,
         "wires": []
     },
     {
-        "id": "a961196c1d209a7e",
+        "id": "ecb711fb647f67d2",
         "type": "ui_text",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
+        "group": "f9bd694023163a55",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 700,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "f727e5e9af8f5394",
+        "type": "ui_text",
+        "z": "1c773a36e349ee9c",
         "group": "b7529c0b48ca831e",
-        "order": 2,
+        "order": 1,
         "width": 0,
         "height": 0,
         "name": "",
@@ -345,17 +345,17 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 810,
-        "y": 540,
+        "x": 820,
+        "y": 600,
         "wires": []
     },
     {
-        "id": "4fdef443c6dbd03d",
+        "id": "eef6382286fc8882",
         "type": "ui_chart",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "name": "",
         "group": "bc8cf8eff8409866",
-        "order": 4,
+        "order": 1,
         "width": 0,
         "height": 0,
         "label": "chart",
@@ -387,40 +387,40 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 670,
-        "y": 300,
+        "x": 680,
+        "y": 360,
         "wires": [
             []
         ]
     },
     {
-        "id": "539760d6e972e889",
+        "id": "33613337f4885bdf",
         "type": "function",
-        "z": "da74ad7843a0c006",
-        "name": "function 6",
-        "func": "// Déclarez les constantes A et B\nconst A = 0.4142; // Remplacez par la valeur souhaitée\nconst B = 0.0803; // Remplacez par la valeur souhaitée\n\n// Récupère la chaîne de caractères du message d'entrée\nlet data = msg.payload;\n\n// Recherche la valeur après \"Pap\" avec une expression régulière\nlet matchPap = data.match(/Pap(\\d+)/);\n\n// Recherche les valeurs de Vrms et Irms avec des expressions régulières\nlet matchVrms = data.match(/Vrms([0-9.]+)/);\nlet matchIrms = data.match(/Irms([0-9.]+)/);\n\n// Si toutes les valeurs nécessaires sont trouvées\nif (matchPap && matchVrms && matchIrms) {\n    let Pap = parseInt(matchPap[1], 10); // Convertit Pap en entier\n    let Vrms = parseFloat(matchVrms[1]); // Convertit Vrms en nombre\n    let Irms = parseFloat(matchIrms[1]); // Convertit Irms en nombre\n    \n    // Calcule Vrms * B + Irms * A\n    let calculatedValue = Vrms * B + Irms * A;\n    \n    // Construit le résultat final : Pap suivi de la parenthèse et \"W\"\n    msg.payload = Pap + \"(\" + calculatedValue.toFixed(4) + \") W\"; // 4 décimales pour le calcul\n    return msg; // Retourne le message avec le résultat\n}\n\n// Sinon, ne retourne rien\nreturn null;\n",
+        "z": "1c773a36e349ee9c",
+        "name": "function 10",
+        "func": "// Déclarez les constantes A et B\nconst A = 0.2251; // Remplacez par la valeur souhaitée\nconst B = 0.0361; // Remplacez par la valeur souhaitée\n\n// Récupère la chaîne de caractères du message d'entrée\nlet data = msg.payload;\n\n// Recherche la valeur après \"Pap\" avec une expression régulière\nlet matchPap = data.match(/Pap(\\d+)/);\n\n// Recherche les valeurs de Vrms et Irms avec des expressions régulières\nlet matchVrms = data.match(/Vrms([0-9.]+)/);\nlet matchIrms = data.match(/Irms([0-9.]+)/);\n\n// Si toutes les valeurs nécessaires sont trouvées\nif (matchPap && matchVrms && matchIrms) {\n    let Pap = parseInt(matchPap[1], 10); // Convertit Pap en entier\n    let Vrms = parseFloat(matchVrms[1]); // Convertit Vrms en nombre\n    let Irms = parseFloat(matchIrms[1]); // Convertit Irms en nombre\n\nlet calculatedValue;\nif(Vrms >198 && Vrms < 233 && Irms >1.21 && Irms<8){\n    calculatedValue= (Vrms * B + Irms * A).toFixed(4); // Calcul arrondi à 4 décimales\n} else{\n    calculatedValue = \"Hors gamme\";\n}\n\n    // Construit le résultat final : Pap suivi de la parenthèse et \"W\"\n    msg.payload = Pap + \"(\" + calculatedValue + \") W\"; \n    return msg; // Retourne le message avec le résultat\n}\n\n// Sinon, ne retourne rien\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 440,
-        "y": 980,
+        "x": 450,
+        "y": 1040,
         "wires": [
             [
-                "731d62c0fe7b6466",
-                "131b0d808d22a5ff",
-                "9fc0ad1c0378c5d0"
+                "eade328819c359e1",
+                "183d5fa1ab1e1618",
+                "7c36c003b91c7106"
             ]
         ]
     },
     {
-        "id": "131b0d808d22a5ff",
+        "id": "183d5fa1ab1e1618",
         "type": "ui_text",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "group": "f9bd694023163a55",
-        "order": 6,
+        "order": 3,
         "width": 0,
         "height": 0,
         "name": "",
@@ -432,16 +432,16 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 650,
-        "y": 1000,
+        "x": 660,
+        "y": 1060,
         "wires": []
     },
     {
-        "id": "731d62c0fe7b6466",
+        "id": "eade328819c359e1",
         "type": "ui_text",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "group": "bc8cf8eff8409866",
-        "order": 6,
+        "order": 2,
         "width": 0,
         "height": 0,
         "name": "",
@@ -453,15 +453,15 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 630,
-        "y": 960,
+        "x": 640,
+        "y": 1020,
         "wires": []
     },
     {
-        "id": "9fc0ad1c0378c5d0",
+        "id": "7c36c003b91c7106",
         "type": "debug",
-        "z": "da74ad7843a0c006",
-        "name": "debug 4",
+        "z": "1c773a36e349ee9c",
+        "name": "debug 6",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -469,46 +469,48 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 620,
-        "y": 1040,
+        "x": 630,
+        "y": 1100,
         "wires": []
     },
     {
-        "id": "69b6729c30e0d9eb",
+        "id": "3e001c756fd8969d",
         "type": "mqtt in",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "name": "",
         "topic": "#",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "f1cd0691c8a44058",
+        "broker": "d0eabcda100afdab",
         "nl": false,
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 210,
-        "y": 520,
+        "x": 220,
+        "y": 580,
         "wires": [
             [
-                "562467ec669055d9",
-                "e24372388f95c940",
-                "0e0c58fb4816fe3f",
-                "412725d5481287f6",
-                "d458f5f1455ff704",
-                "122fe66a238e0ff0",
-                "99d25383b058245a",
-                "c32f70a1c81eb7cd",
-                "2e4988cea564602f",
-                "07266a52eb998812",
-                "539760d6e972e889",
-                "7e7a41fe6ae5a314"
+                "7c329bb74105592c",
+                "6ad40d1d3a88d7bf",
+                "810d28c362d1cb45",
+                "878807cdd46df89b",
+                "e2e0a519d72698c4",
+                "f90822979aa3bc25",
+                "be735b28d81e6109",
+                "b286cbfc65ac834a",
+                "0a48ddc3f2c8132e",
+                "86d538ba2fb293e8",
+                "33613337f4885bdf",
+                "33d9bb28e22cd25d",
+                "c4daed5ba1a74e45",
+                "90ae368bc4afe3cc"
             ]
         ]
     },
     {
-        "id": "bafc404d47dc21c6",
+        "id": "dd9917f20f5ba5d0",
         "type": "e-mail",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "server": "smtp.gmail.com",
         "port": "465",
         "authtype": "BASIC",
@@ -516,16 +518,16 @@
         "token": "oauth2Response.access_token",
         "secure": true,
         "tls": true,
-        "name": "gwenael.drouet@etu.univ-amu.fr",
+        "name": "lerda.matt@etu.univ-amu.fr",
         "dname": "Alerte de dépassement de seuils",
-        "x": 790,
-        "y": 80,
+        "x": 800,
+        "y": 140,
         "wires": []
     },
     {
-        "id": "a40771a604e31d5d",
+        "id": "f35bb1a485d566d7",
         "type": "inject",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "name": "",
         "props": [
             {
@@ -539,40 +541,40 @@
         "topic": "",
         "payload": "Pap1000 Pac100",
         "payloadType": "str",
-        "x": 220,
-        "y": 360,
+        "x": 150,
+        "y": 420,
         "wires": [
             [
-                "07266a52eb998812"
+                "86d538ba2fb293e8"
             ]
         ]
     },
     {
-        "id": "931d18281d15aab9",
+        "id": "9500a1765ee8628e",
         "type": "function",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "name": "Seuils VS",
-        "func": "// Récupère la nouvelle valeur du seuil depuis msg.payload (qui provient du dashboard)\nlet seuilPapModifie = msg.payload.Pap;  // La nouvelle valeur du seuil Pap\nlet seuilPacModifie = msg.payload.Pac;  // La nouvelle valeur du seuil Pac\n\n// Envoie la nouvelle valeur des seuils via MQTT\nmsg.payload = { Pap: seuilPapModifie, Pac: seuilPacModifie };  // Structure du message avec les nouveaux seuils\nmsg.topic = \"seuil/valeur\";  // Le topic MQTT où envoyer les seuils modifiés\n\n// Retourne le message pour qu'il soit envoyé au nœud mqtt out\nreturn msg;\n",
+        "func": "// Récupère la nouvelle valeur du seuil depuis msg.payload (qui provient du dashboard)\nlet seuilPapModifie = msg.payload.Pap;  // La nouvelle valeur du seuil Pap\nlet seuilPacModifie = msg.payload.Pac;  // La nouvelle valeur du seuil Pac\nlet seuilPreacModifie = msg.payload.Preac;  // La nouvelle valeur du seuil Pac\n\n// Envoie la nouvelle valeur des seuils via MQTT\nmsg.payload = { Pap: seuilPapModifie, Pac: seuilPacModifie };  // Structure du message avec les nouveaux seuils\nmsg.topic = \"seuil/valeur\";  // Le topic MQTT où envoyer les seuils modifiés\n\n// Retourne le message pour qu'il soit envoyé au nœud mqtt out\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 460,
-        "y": 20,
+        "x": 470,
+        "y": 80,
         "wires": [
             []
         ]
     },
     {
-        "id": "91f581c61f0d7cfa",
+        "id": "3d71e293921a690d",
         "type": "ui_form",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "name": "",
         "label": "",
         "group": "afa7464419ab9042",
-        "order": 2,
+        "order": 3,
         "width": 0,
         "height": 0,
         "options": [
@@ -594,19 +596,19 @@
         "topicType": "msg",
         "splitLayout": "",
         "className": "",
-        "x": 230,
-        "y": 60,
+        "x": 240,
+        "y": 120,
         "wires": [
             [
-                "931d18281d15aab9",
-                "07266a52eb998812"
+                "9500a1765ee8628e",
+                "86d538ba2fb293e8"
             ]
         ]
     },
     {
-        "id": "d2ae115fe364cb67",
+        "id": "601f038c6a41aced",
         "type": "ui_form",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "name": "",
         "label": "",
         "group": "afa7464419ab9042",
@@ -633,44 +635,21 @@
         "splitLayout": "",
         "className": "",
         "x": 230,
-        "y": 140,
+        "y": 180,
         "wires": [
             [
-                "931d18281d15aab9",
-                "07266a52eb998812"
+                "9500a1765ee8628e",
+                "86d538ba2fb293e8"
             ]
         ]
     },
     {
-        "id": "788fe497e51b2156",
-        "type": "ui_media",
-        "z": "da74ad7843a0c006",
-        "group": "9a9fc31476f9627c",
-        "name": "",
-        "width": 2,
-        "height": 2,
-        "order": 3,
-        "category": "image capteur",
-        "file": "logo_gam²IoT.png",
-        "layout": "adjust",
-        "showcontrols": true,
-        "loop": true,
-        "onstart": false,
-        "scope": "local",
-        "tooltip": "",
-        "x": 1330,
-        "y": 240,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "6a424a72e059952f",
+        "id": "a7be0a6ec26afeea",
         "type": "ui_text",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "group": "9a9fc31476f9627c",
-        "order": 5,
-        "width": 7,
+        "order": 7,
+        "width": 12,
         "height": 1,
         "name": "",
         "label": "Nom du client :",
@@ -681,17 +660,17 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 1360,
-        "y": 160,
+        "x": 1170,
+        "y": 220,
         "wires": []
     },
     {
-        "id": "8a956be20bb8216e",
+        "id": "9d99e92414eed183",
         "type": "ui_text",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "group": "9a9fc31476f9627c",
-        "order": 7,
-        "width": 7,
+        "order": 8,
+        "width": 12,
         "height": 1,
         "name": "",
         "label": "Référence de l'appareil :",
@@ -702,14 +681,14 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 1390,
-        "y": 200,
+        "x": 1200,
+        "y": 260,
         "wires": []
     },
     {
-        "id": "8d330136a9061371",
+        "id": "5f1d0f1945eb348c",
         "type": "ui_text",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "group": "1345f75c9a2a95f8",
         "order": 1,
         "width": 7,
@@ -723,14 +702,14 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 650,
-        "y": 640,
+        "x": 660,
+        "y": 700,
         "wires": []
     },
     {
-        "id": "6c3e1d212587200e",
+        "id": "8a9d7b41730eaf88",
         "type": "ui_text",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "group": "9a127749d1fa4d67",
         "order": 1,
         "width": 7,
@@ -744,14 +723,14 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 670,
-        "y": 700,
+        "x": 680,
+        "y": 760,
         "wires": []
     },
     {
-        "id": "1a1d63189c7a6015",
+        "id": "ec6f3e909551ae87",
         "type": "ui_text",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "group": "8f757cf62e535565",
         "order": 1,
         "width": 7,
@@ -765,14 +744,14 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 670,
-        "y": 780,
+        "x": 680,
+        "y": 840,
         "wires": []
     },
     {
-        "id": "54a50ad142d950a2",
+        "id": "dab041de33bfde38",
         "type": "ui_text",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "group": "8f2f155f3c7e826a",
         "order": 1,
         "width": 7,
@@ -786,14 +765,14 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 800,
-        "y": 580,
+        "x": 810,
+        "y": 640,
         "wires": []
     },
     {
-        "id": "7e7a41fe6ae5a314",
+        "id": "33d9bb28e22cd25d",
         "type": "file",
-        "z": "da74ad7843a0c006",
+        "z": "1c773a36e349ee9c",
         "name": "Ecrire",
         "filename": "C:\\Users\\Etudiant\\Desktop\\test.csv",
         "filenameType": "str",
@@ -801,11 +780,329 @@
         "createDir": false,
         "overwriteFile": "false",
         "encoding": "utf8",
-        "x": 450,
-        "y": 840,
+        "x": 460,
+        "y": 900,
         "wires": [
             []
         ]
+    },
+    {
+        "id": "ce4b5722e931bf8c",
+        "type": "ui_template",
+        "z": "1c773a36e349ee9c",
+        "group": "9a9fc31476f9627c",
+        "name": "Affichage Page d'acceuil",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "format": "<style>\n\n    /*Main background*/\n    body {\n        background: linear-gradient(\n            180deg, /* Angle vertical (haut en bas) */\n            #1E90FF 0%, /* Bleu Dodger (bleu clair vif) en haut */\n            #FFB347 100% /* Orange doux (moins saturé) en bas */\n        );\n        height: 100vh;\n        margin: 0;\n    }\n\n    /*Top bar*/\n    body.nr-dashboard-theme md-toolbar,\n    body.nr-dashboard-theme md-content md-card {\n        background-color: transparent !important;\n        color: #FFFFFF !important;\n    }\n\n    /*Left menu*/\n    /*Sidebar*/\n    body.nr-dashboard-theme md-sidenav {\n        color: white !important;\n        background-color: rgba(255, 255, 255, 0.1) !important; /* Fond léger transparent */\n    }\n    /*Hover selection*/\n    a.md-no-style, button.md-no-style {\n        border-radius: 10px !important;\n    }\n    /*Selected*/\n    .nr-menu-item-active div button {\n        border-right: 4px solid #FFD700 !important; /* Jaune doré pour la sélection */\n    }\n    /*List*/\n    body.nr-dashboard-theme md-sidenav div.md-list-item-inner {\n        color: white !important;\n        background-color: rgba(255, 140, 0, 0.6) !important; /* Orange doux foncé */\n        border-radius: 10px !important;\n    }\n\n    /*Groups*/\n    ui-card-panel {\n        background-color: rgba(255, 255, 255, 0.1) !important; /* Fond très léger transparent */\n        border-radius: 10px !important;\n    }\n    .nr-dashboard-theme ui-card-panel {\n        border: none !important;\n    }\n    /*Name groups*/\n    .nr-dashboard-theme ui-card-panel p.nr-dashboard-cardtitle {\n        color: rgba(255, 255, 255, 0.7) !important; /* Texte des groupes en blanc transparent */\n    }\n\n    /*Buttons*/\n    .nr-dashboard-theme .nr-dashboard-button .md-button {\n        background-color: rgba(255, 255, 255, 0.25) !important; /* Boutons avec transparence douce */\n        color: #4C4C4C !important; /* Texte gris foncé */\n    }\n    .md-button {\n        border-radius: 10px !important;\n    }\n\n    /*Dropdown menu*/\n    .nr-dashboard-theme md-select-menu {\n        background-color: rgba(30, 144, 255, 0.9) !important; /* Bleu Dodger pour le menu */\n    }\n    .nr-dashboard-theme md-select-menu, .nr-dashboard-theme md-select-menu md-option {\n        background-color: transparent !important;\n    }\n    .nr-dashboard-theme .md-select-menu-container {\n        border-radius: 10px !important;\n        border: none !important;\n    }\n    .nr-dashboard-theme md-select-menu md-option[selected] {\n        color: white !important;\n        background-color: #FF4500 !important; /* Orange rouge pour la sélection */\n    }\n\n    /*Template*/\n    md-card>img, md-card>md-card-header img, md-card md-card-title-media img {\n        border-radius: 10px !important;\n    }\n\n    .nr-dashboard-chart .chart-line {\n        stroke: #FF6347 !important; /* Ligne de graphique en rouge tomate */\n        fill: none !important; /* Pas de remplissage sous la ligne */\n    }\n\n    /* Color picker text BG */\n    .nr-dashboard-theme .color-picker-input-wrapper > input {\n        color: white !important;\n        background-color: transparent !important;\n    }\n    .nr-dashboard-theme .nr-dashboard-numeric .value {\n        background-color: rgb(0 0 0 / 0%) !important;\n        color: #4C4C4C !important;\n    }\n    .nr-dashboard-theme .nr-dashboard-slider .md-thumb:after {\n        background-color: #FF6347 !important; /* Rouge tomate pour le curseur */\n        border-color: #FF6347 !important;\n    }\n\n</style>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "Node-RED Dashboard Custom CSS",
+        "x": 1210,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b2d77e2c8aa3cd5c",
+        "type": "ui_template",
+        "z": "1c773a36e349ee9c",
+        "group": "f9bd694023163a55",
+        "name": "Affichage Tableau puissance",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "format": "<style>\n\n    /*Main background*/\n    body {\n        background: linear-gradient(\n            180deg, /* Angle vertical (haut en bas) */\n            #1E90FF 0%, /* Bleu Dodger (bleu clair vif) en haut */\n            #FFB347 100% /* Orange doux (moins saturé) en bas */\n        );\n        height: 100vh;\n        margin: 0;\n    }\n\n    /*Top bar*/\n    body.nr-dashboard-theme md-toolbar,\n    body.nr-dashboard-theme md-content md-card {\n        background-color: transparent !important;\n        color: #FFFFFF !important;\n    }\n\n    /*Left menu*/\n    /*Sidebar*/\n    body.nr-dashboard-theme md-sidenav {\n        color: white !important;\n        background-color: rgba(255, 255, 255, 0.1) !important; /* Fond léger transparent */\n    }\n    /*Hover selection*/\n    a.md-no-style, button.md-no-style {\n        border-radius: 10px !important;\n    }\n    /*Selected*/\n    .nr-menu-item-active div button {\n        border-right: 4px solid #FFD700 !important; /* Jaune doré pour la sélection */\n    }\n    /*List*/\n    body.nr-dashboard-theme md-sidenav div.md-list-item-inner {\n        color: white !important;\n        background-color: rgba(255, 140, 0, 0.6) !important; /* Orange doux foncé */\n        border-radius: 10px !important;\n    }\n\n    /*Groups*/\n    ui-card-panel {\n        background-color: rgba(255, 255, 255, 0.1) !important; /* Fond très léger transparent */\n        border-radius: 10px !important;\n    }\n    .nr-dashboard-theme ui-card-panel {\n        border: none !important;\n    }\n    /*Name groups*/\n    .nr-dashboard-theme ui-card-panel p.nr-dashboard-cardtitle {\n        color: rgba(255, 255, 255, 0.7) !important; /* Texte des groupes en blanc transparent */\n    }\n\n    /*Buttons*/\n    .nr-dashboard-theme .nr-dashboard-button .md-button {\n        background-color: rgba(255, 255, 255, 0.25) !important; /* Boutons avec transparence douce */\n        color: #4C4C4C !important; /* Texte gris foncé */\n    }\n    .md-button {\n        border-radius: 10px !important;\n    }\n\n    /*Dropdown menu*/\n    .nr-dashboard-theme md-select-menu {\n        background-color: rgba(30, 144, 255, 0.9) !important; /* Bleu Dodger pour le menu */\n    }\n    .nr-dashboard-theme md-select-menu, .nr-dashboard-theme md-select-menu md-option {\n        background-color: transparent !important;\n    }\n    .nr-dashboard-theme .md-select-menu-container {\n        border-radius: 10px !important;\n        border: none !important;\n    }\n    .nr-dashboard-theme md-select-menu md-option[selected] {\n        color: white !important;\n        background-color: #FF4500 !important; /* Orange rouge pour la sélection */\n    }\n\n    /*Template*/\n    md-card>img, md-card>md-card-header img, md-card md-card-title-media img {\n        border-radius: 10px !important;\n    }\n\n    .nr-dashboard-chart .chart-line {\n        stroke: #FF6347 !important; /* Ligne de graphique en rouge tomate */\n        fill: none !important; /* Pas de remplissage sous la ligne */\n    }\n\n    /* Color picker text BG */\n    .nr-dashboard-theme .color-picker-input-wrapper > input {\n        color: white !important;\n        background-color: transparent !important;\n    }\n    .nr-dashboard-theme .nr-dashboard-numeric .value {\n        background-color: rgb(0 0 0 / 0%) !important;\n        color: #4C4C4C !important;\n    }\n    .nr-dashboard-theme .nr-dashboard-slider .md-thumb:after {\n        background-color: #FF6347 !important; /* Rouge tomate pour le curseur */\n        border-color: #FF6347 !important;\n    }\n\n</style>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "Node-RED Dashboard Custom CSS",
+        "x": 1220,
+        "y": 640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "48baee4d06b7d967",
+        "type": "ui_template",
+        "z": "1c773a36e349ee9c",
+        "group": "0e0a4d424673e848",
+        "name": "Affichage tableau environnement",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "format": "<style>\n\n    /*Main background*/\n    body {\n        background: linear-gradient(\n            180deg, /* Angle vertical (haut en bas) */\n            #1E90FF 0%, /* Bleu Dodger (bleu clair vif) en haut */\n            #FFB347 100% /* Orange doux (moins saturé) en bas */\n        );\n        height: 100vh;\n        margin: 0;\n    }\n\n    /*Top bar*/\n    body.nr-dashboard-theme md-toolbar,\n    body.nr-dashboard-theme md-content md-card {\n        background-color: transparent !important;\n        color: #FFFFFF !important;\n    }\n\n    /*Left menu*/\n    /*Sidebar*/\n    body.nr-dashboard-theme md-sidenav {\n        color: white !important;\n        background-color: rgba(255, 255, 255, 0.1) !important; /* Fond léger transparent */\n    }\n    /*Hover selection*/\n    a.md-no-style, button.md-no-style {\n        border-radius: 10px !important;\n    }\n    /*Selected*/\n    .nr-menu-item-active div button {\n        border-right: 4px solid #FFD700 !important; /* Jaune doré pour la sélection */\n    }\n    /*List*/\n    body.nr-dashboard-theme md-sidenav div.md-list-item-inner {\n        color: white !important;\n        background-color: rgba(255, 140, 0, 0.6) !important; /* Orange doux foncé */\n        border-radius: 10px !important;\n    }\n\n    /*Groups*/\n    ui-card-panel {\n        background-color: rgba(255, 255, 255, 0.1) !important; /* Fond très léger transparent */\n        border-radius: 10px !important;\n    }\n    .nr-dashboard-theme ui-card-panel {\n        border: none !important;\n    }\n    /*Name groups*/\n    .nr-dashboard-theme ui-card-panel p.nr-dashboard-cardtitle {\n        color: rgba(255, 255, 255, 0.7) !important; /* Texte des groupes en blanc transparent */\n    }\n\n    /*Buttons*/\n    .nr-dashboard-theme .nr-dashboard-button .md-button {\n        background-color: rgba(255, 255, 255, 0.25) !important; /* Boutons avec transparence douce */\n        color: #4C4C4C !important; /* Texte gris foncé */\n    }\n    .md-button {\n        border-radius: 10px !important;\n    }\n\n    /*Dropdown menu*/\n    .nr-dashboard-theme md-select-menu {\n        background-color: rgba(30, 144, 255, 0.9) !important; /* Bleu Dodger pour le menu */\n    }\n    .nr-dashboard-theme md-select-menu, .nr-dashboard-theme md-select-menu md-option {\n        background-color: transparent !important;\n    }\n    .nr-dashboard-theme .md-select-menu-container {\n        border-radius: 10px !important;\n        border: none !important;\n    }\n    .nr-dashboard-theme md-select-menu md-option[selected] {\n        color: white !important;\n        background-color: #FF4500 !important; /* Orange rouge pour la sélection */\n    }\n\n    /*Template*/\n    md-card>img, md-card>md-card-header img, md-card md-card-title-media img {\n        border-radius: 10px !important;\n    }\n\n    .nr-dashboard-chart .chart-line {\n        stroke: #FF6347 !important; /* Ligne de graphique en rouge tomate */\n        fill: none !important; /* Pas de remplissage sous la ligne */\n    }\n\n    /* Color picker text BG */\n    .nr-dashboard-theme .color-picker-input-wrapper > input {\n        color: white !important;\n        background-color: transparent !important;\n    }\n    .nr-dashboard-theme .nr-dashboard-numeric .value {\n        background-color: rgb(0 0 0 / 0%) !important;\n        color: #4C4C4C !important;\n    }\n    .nr-dashboard-theme .nr-dashboard-slider .md-thumb:after {\n        background-color: #FF6347 !important; /* Rouge tomate pour le curseur */\n        border-color: #FF6347 !important;\n    }\n\n</style>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "Node-RED Dashboard Custom CSS",
+        "x": 1230,
+        "y": 680,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "46ecf4c9d60dc394",
+        "type": "ui_media",
+        "z": "1c773a36e349ee9c",
+        "group": "9a9fc31476f9627c",
+        "name": "",
+        "width": 4,
+        "height": 4,
+        "order": 4,
+        "category": "image",
+        "file": "logo.png",
+        "layout": "adjust",
+        "showcontrols": true,
+        "loop": true,
+        "onstart": false,
+        "scope": "local",
+        "tooltip": "",
+        "x": 1140,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "abd06f17173393ed",
+        "type": "ui_media",
+        "z": "1c773a36e349ee9c",
+        "group": "9a9fc31476f9627c",
+        "name": "",
+        "width": 8,
+        "height": 7,
+        "order": 3,
+        "category": "image",
+        "file": "capteur.png",
+        "layout": "adjust",
+        "showcontrols": true,
+        "loop": true,
+        "onstart": false,
+        "scope": "local",
+        "tooltip": "",
+        "x": 1140,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c4daed5ba1a74e45",
+        "type": "function",
+        "z": "1c773a36e349ee9c",
+        "name": "Preact",
+        "func": "// Récupère la chaîne de caractères du message d'entrée\nlet data = msg.payload;\n\n// Recherche la valeur après \"Pap\" avec une expression régulière\nlet matchPap = data.match(/Pr(\\d+)/);\n\n// Si trouvé, renvoie la valeur\nif (matchPap) {\n    msg.payload = parseInt(matchPap[1], 10); // Convertit en entier\n    return msg; // Retourne le message avec la valeur\n}\n\n// Sinon, ne retourne rien\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 400,
+        "wires": [
+            [
+                "432a1ed58fdee202",
+                "5d2047e719c07401"
+            ]
+        ]
+    },
+    {
+        "id": "432a1ed58fdee202",
+        "type": "function",
+        "z": "1c773a36e349ee9c",
+        "name": "function 11",
+        "func": "// Récupère la valeur depuis msg.payload\nlet valeur = msg.payload;\n\n// Vérifie si la valeur est supérieure à 1000\nif (valeur > 500) {\n    // Si la valeur est supérieure à 1000, on renvoie true\n    return { payload: true };\n}\n\n// Sinon, ne rien renvoyer\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5d2047e719c07401",
+        "type": "ui_chart",
+        "z": "1c773a36e349ee9c",
+        "name": "",
+        "group": "0b60fc7f67431deb",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "chart",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 680,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8de3309a8e7f9630",
+        "type": "ui_form",
+        "z": "1c773a36e349ee9c",
+        "name": "",
+        "label": "",
+        "group": "afa7464419ab9042",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "Seuil Puissance réactive",
+                "value": "1000",
+                "type": "text",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "1000": ""
+        },
+        "payload": "",
+        "submit": "submit",
+        "cancel": "cancel",
+        "topic": "topic",
+        "topicType": "msg",
+        "splitLayout": "",
+        "className": "",
+        "x": 230,
+        "y": 60,
+        "wires": [
+            [
+                "86d538ba2fb293e8",
+                "9500a1765ee8628e"
+            ]
+        ]
+    },
+    {
+        "id": "90ae368bc4afe3cc",
+        "type": "function",
+        "z": "1c773a36e349ee9c",
+        "name": "function 12",
+        "func": "// Déclarez les constantes A et B\nconst A = 0.2251; // Remplacez par la valeur souhaitée\nconst B = 0.0361; // Remplacez par la valeur souhaitée\n\n// Récupère la chaîne de caractères du message d'entrée\nlet data = msg.payload;\n\n// Recherche la valeur après \"Pap\" avec une expression régulière\nlet matchPap = data.match(/Pr(\\d+)/);\n\n// Recherche les valeurs de Vrms et Irms avec des expressions régulières\nlet matchVrms = data.match(/Vrms([0-9.]+)/);\nlet matchIrms = data.match(/Irms([0-9.]+)/);\n\n// Si toutes les valeurs nécessaires sont trouvées\nif (matchPap && matchVrms && matchIrms) {\n    let Pr = parseInt(matchPap[1], 10); // Convertit Pap en entier\n    let Vrms = parseFloat(matchVrms[1]); // Convertit Vrms en nombre\n    let Irms = parseFloat(matchIrms[1]); // Convertit Irms en nombre\n\nlet calculatedValue;\n\n    // Définit la valeur affichée entre parenthèses\nif(Vrms >198 && Vrms < 233 && Irms >1.21 && Irms<8){\n    calculatedValue= (Vrms * B + Irms * A).toFixed(4); // Calcul arrondi à 4 décimales\n} else{\n    calculatedValue = \"Hors gamme\";\n}\n\n    // Construit le résultat final : Pap suivi de la parenthèse et \"W\"\n    msg.payload = Pr + \"(\" + calculatedValue + \") W\"; \n    return msg; // Retourne le message avec le résultat\n}\n\n// Sinon, ne retourne rien\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 1200,
+        "wires": [
+            [
+                "8696b8e6fc970d13",
+                "f589eac1b2fd5b44"
+            ]
+        ]
+    },
+    {
+        "id": "8696b8e6fc970d13",
+        "type": "ui_text",
+        "z": "1c773a36e349ee9c",
+        "group": "0b60fc7f67431deb",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Puissance réactive :",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 650,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "f589eac1b2fd5b44",
+        "type": "debug",
+        "z": "1c773a36e349ee9c",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 630,
+        "y": 1260,
+        "wires": []
+    },
+    {
+        "id": "aa144fe1ef5a94bc",
+        "type": "ui_spacer",
+        "z": "1c773a36e349ee9c",
+        "name": "spacer",
+        "group": "9a9fc31476f9627c",
+        "order": 2,
+        "width": 4,
+        "height": 1
+    },
+    {
+        "id": "1d18f75c37e2fb95",
+        "type": "ui_spacer",
+        "z": "1c773a36e349ee9c",
+        "name": "spacer",
+        "group": "9a9fc31476f9627c",
+        "order": 5,
+        "width": 4,
+        "height": 1
+    },
+    {
+        "id": "195c78b805f6ea24",
+        "type": "ui_spacer",
+        "z": "1c773a36e349ee9c",
+        "name": "spacer",
+        "group": "9a9fc31476f9627c",
+        "order": 6,
+        "width": 4,
+        "height": 1
     },
     {
         "id": "f9bd694023163a55",
@@ -825,7 +1122,7 @@
         "tab": "8aa8a59b31fb9304",
         "order": 2,
         "disp": true,
-        "width": 9,
+        "width": "9",
         "collapse": false,
         "className": ""
     },
@@ -834,17 +1131,17 @@
         "type": "ui_group",
         "name": "Heure",
         "tab": "8aa8a59b31fb9304",
-        "order": 4,
+        "order": 5,
         "disp": true,
         "width": 7,
         "collapse": false,
         "className": ""
     },
     {
-        "id": "f1cd0691c8a44058",
+        "id": "d0eabcda100afdab",
         "type": "mqtt-broker",
         "name": "",
-        "broker": "147.94.219.13",
+        "broker": "172.23.37.242",
         "port": "1883",
         "clientid": "",
         "autoConnect": true,
@@ -876,7 +1173,7 @@
         "type": "ui_group",
         "name": "Seuil alerte",
         "tab": "8aa8a59b31fb9304",
-        "order": 3,
+        "order": 4,
         "disp": true,
         "width": "6",
         "collapse": false,
@@ -889,7 +1186,7 @@
         "tab": "d7bb906fddd23579",
         "order": 1,
         "disp": true,
-        "width": 7,
+        "width": 12,
         "collapse": false,
         "className": ""
     },
@@ -934,6 +1231,28 @@
         "order": 4,
         "disp": true,
         "width": 7,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "0e0a4d424673e848",
+        "type": "ui_group",
+        "name": "Default",
+        "tab": "ec331c7506ebc04e",
+        "order": 5,
+        "disp": false,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "0b60fc7f67431deb",
+        "type": "ui_group",
+        "name": "Puissance Réactive",
+        "tab": "8aa8a59b31fb9304",
+        "order": 3,
+        "disp": true,
+        "width": "9",
         "collapse": false,
         "className": ""
     },
